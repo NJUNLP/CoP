@@ -19,29 +19,39 @@ rouge                   1.0.1
 ```
 # Reproduce Step
 ## Preparation
-Download Pretrain Model
-## How to Evaluation
+Download Pretrain Model from Huggingface (for example [BARTCNN](https://huggingface.co/facebook/bart-large-cnn))
 
-## How to Train
+## How to Evaluation
+Evaluate on Token-level task
+
+
+Evaluate on Summary-level Task
+
+Evaluate on Inconsistency Category Task
+## How to Train with Prompt Tuning
+Looking into PromptTuning folder
 
 # Experimental Results
 ## Token-Level
 
 |  Model  |  F1(%)  |
 |  :----: | :----:  |
-|  BARTSc  |  0.1  |
-|  CoP Zero-shot  |  0.1  |
-|  CoP Few-shot  |  0.1  |
-|  CoP Full-shot  |  0.1  |
+|  DAE-Weak  |  59.10  |
+|  BARTSc  |  59.25  |
+|  EntFA  |  60.23  |
+|  CoP Zero-shot  |  63.72  |
+|  DAE  |  65.00  |
+|  CoP Few-shot  |  66.56  |
+|  CoP Full-shot  |  69.61  |
 
 
 ## Summary-Level Inconsistency Detection
-|  Model  |  Pearson(%)  |
-|  :----:  | :----:  |
-|  BARTSc  |  0.1  |
-|  CoP Zero-shot  |  0.1  |
-|  CoP Few-shot  |  0.1  |
-|  CoP Full-shot  |  0.1  |
+|  Model  |  QAGSCNN |  QAGSXSUM |  FRANKCNN |  FRANKXSUM |
+|  :----:  | :----:  | :----:  | :----:  | :----:  |
+|  BARTSc  |  0.1  |  0.1  |  0.1  |  0.1  |
+|  CoP Zero-shot  |  0.1  |  0.1  |  0.1  |  0.1  |
+|  CoP Few-shot  |  0.1  |  0.1  |  0.1  |  0.1  |
+|  CoP Full-shot  |  0.1  |  0.1  |  0.1  |  0.1  |
 
 ## Inconsistency Category Detection
 
