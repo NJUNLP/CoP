@@ -20,7 +20,49 @@ from utils.overlap_predictor import returnNone_baseline
 from utils.overlap_predictor import synonyms_notin
 from utils.process import re_upper
 from utils.process import filter_none
+from transformers import BartTokenizer
+tokenizer = BartTokenizer.from_pretrained("/home/shesj/workspace/Data/PLM/BART")
 
+
+def is_skip(input_text):
+    encoded_tgt = tokenizer(
+                    [input_text],
+                    max_length=1024,
+                    truncation=True,
+                    padding=True,
+                    return_tensors='pt'
+                )
+    tgt_tokens = encoded_tgt['input_ids']
+
+    token_list = []
+    for j in tgt_tokens[0]:
+        token_list.append(tokenizer._convert_id_to_token(j.cpu().numpy().tolist()))
+    filtered_token_list = []
+    for i in token_list:
+        filtered_token_list.append(tokenizer.convert_tokens_to_string([i]).strip())
+    filtered_token_list,token2bpe,bpe2tokens = convert_bpe2_tokens_space([input_text],filtered_token_list)
+    if token2bpe is None:
+        return True
+    else:
+        return False
+
+def create_toy_data():
+    f = open("/home/shesj/workspace/Data/Data/Sort_XSUM/TConvS2S/TConvS2S.source",'r')
+    source = f.readlines()
+    f = open("/home/shesj/workspace/Data/Data/Sort_XSUM/TConvS2S/TConvS2S.target",'r')
+    target = f.readlines()
+    max_sample = 10
+    source = [i.strip() for i in source]
+    target = [i.strip() for i in target]
+    
+    f = open("data/toy.json",'w')
+    data = []
+    for i,j in zip(source,target):
+        data.append({'doc':i,'sum':j})
+
+    data = data[:max_sample]
+    import json
+    json.dump(data,f,indent=2)
 
 sample_infor_dump = []
 def load_model(args):
@@ -33,16 +75,16 @@ def load_model(args):
         from model.BaselineBARTScorer import BARTScorer
         # from model.BRIO import BARTScorer
         # from model.PegasusScorer import BARTScorer
-        high_bart_scorer = BARTScorer(device='cuda:0', checkpoint=arg.model_path)
+        high_bart_scorer = BARTScorer(device='cuda:0', checkpoint=args.model_path)
     else:
         from model.PromptBARTScore import BARTScorer
-        high_bart_scorer = BARTScorer(checkpoint=arg.model_path,PromptBART = True)
+        high_bart_scorer = BARTScorer(checkpoint=args.model_path,PromptBART = True)
     return high_bart_scorer
 
 
 count = 0
 
-def predict_with_known_num(filtered_token_list,pre_score,after_score,summary,number):
+def predict_with_known_num(filtered_token_list,pre_score,after_score,summary):
     filtered_token_list,token2bpe,bpe2tokens = convert_bpe2_tokens_space([summary],filtered_token_list)
 
     pre_score[0] = align_values_frombpe2tokens(pre_score[0],token2bpe,bpe2tokens)
@@ -57,25 +99,25 @@ def predict_with_known_num(filtered_token_list,pre_score,after_score,summary,num
     #diff_score,temp_count = pass_loss_Entity(after_score,filtered_token_list)
     return diff_score
 
-def zero_shot_predictor(d,s):
+def zero_shot_predictor(d,s,high_bart_scorer):
     filtered_token_list,pre_score,_ = high_bart_scorer.score([d],[s])
     filtered_token_list,after_score,_ = high_bart_scorer.score([s + " " + d],[s])
-    predict_score = predict_with_known_num(filtered_token_list,pre_score,after_score,summary,number)
+    predict_score = predict_with_known_num(filtered_token_list,pre_score,after_score,s)
     return predict_score
 
-def few_shot_predictor(d,s):
+def few_shot_predictor(d,s,high_bart_scorer):
     filtered_token_list,pre_score,_ = high_bart_scorer.score([d],[s])
     filtered_token_list,after_score,_ = high_bart_scorer.score([s + " " + d],[s],inserted = s)
-    predict_score = predict_with_known_num(filtered_token_list,pre_score,after_score,summary,number)
+    predict_score = predict_with_known_num(filtered_token_list,pre_score,after_score,s)
     return predict_score
 
-def predict(args):
+def predict(args,high_bart_scorer):
     documents = []
     summarys = []
     result_list = []
     
     import json
-    f = open(arg.data,'r')
+    f = open(args.data_path,'r')
     data = json.load(f)
     for i in data:
         documents.append(i['doc'])
@@ -89,7 +131,6 @@ def predict(args):
     from tqdm import tqdm
     valid_sample = 0
 
-    total_predict_label = []
     total_not_in_source_predict = []
     total_prob_score = []
 
@@ -99,24 +140,15 @@ def predict(args):
     dataset_level_information = []
     for i in tqdm(range(len(documents))):
         sample_id += 1
-        if sample_id in invalid_sample_id:
-            continue
-        if sample_id in trainset:
-            continue
-
-        sentence_level += 1
         document = documents[i]
         summary = summarys[i]
-
+        if is_skip(summary):
+            print("HIT SKIP")
+            continue
         pre_sum = summary
         summary = summary.capitalize()
         summary = re_upper(document,summary)
 
-        label = labels[i]
-        target = [int(l) for l in label.split(" ")]
-        number = sum(target)
-            
-        total_predict_label = total_predict_label + target
 
         
         valid_sample += 1
@@ -128,40 +160,35 @@ def predict(args):
 
         sample_info = {}
 
-        if arg.mode == "zero-shot":
-            predict_score,pre_score,after_score = zero_shot_predictor(d,s)
-            sample_info['pre_score'] = pre_score
-            sample_info['after_score'] = after_score
-            total_after_score += after_score
-            total_pre_score += pre_score
+        if args.mode == "zero-shot":
+            predict_score = zero_shot_predictor(d,s,high_bart_scorer)
+        
 
-        if arg.mode == 'full-shot':
-            predict_score = few_shot_predictor(d,s)
+        if args.mode == 'full-shot':
+            predict_score = few_shot_predictor(d,s,high_bart_scorer)
         
 
         total_prob_score += predict_score
         
         
         
-        sample_info['data'] = dataset
         sample_info['predict_score'] = predict_score
-        sample_info['not_in_score'] = predict_label1
-        sample_info['target_label'] = target
+        #sample_info['not_in_score'] = predict_label1
         sample_info['document'] = d
         sample_info['summary'] = s
+        assert len(sample_info['predict_score']) == len(sample_info['summary'].split(" "))
         
         dataset_level_information.append(sample_info)
 
-    for no,pro,la in zip(total_not_in_source_predict,total_prob_score,total_predict_label):
+    for no,pro in zip(total_not_in_source_predict,total_prob_score):
         sample_info = {}
-        sample_info['data'] = dataset
         sample_info['not_in'] = no
         sample_info['prob_s'] = pro
-        sample_info['label'] = la
         corpus_predict.append(sample_info)
 
     not_in_predict = sum(total_not_in_source_predict)
-    expect_predict_num = int(sum(total_predict_label) * 0.55) + sum(total_predict_label)-not_in_predict
+    expect_predict_num = int(len(total_not_in_source_predict) * args.predict_raio)
+    #expect_predict_num = int(sum(total_predict_label) * 0.55) + sum(total_predict_label)-not_in_predict
     total_pretent_predict_sample += expect_predict_num
     idx2score = {}
     print(len(total_prob_score))
@@ -181,55 +208,55 @@ def predict(args):
     for sample in dataset_level_information:
         sample['predicted_label'] = total_not_in_source_predict[iter_index:iter_index+len(sample['predict_score'])]
         iter_index += len(sample['predict_score'])
-
-    f = open(arg.output_file_path,'w')
+    
+    f = open(args.output_file_path,'w')
     import json
     json.dump(dataset_level_information,f,indent=2)
 
 
 
 def main(args):
-    #model = load_model(args)
-    print(args.data)
-
+    model = load_model(args)
+    #print(args.data)
+    predict(args,model)
 
 
 if __name__ == "__main__":
+    create_toy_data()
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--data_path",
         type=str,
         default=None,
-        required=True,
-        help="The path of the source articles.",
+        required=True
     )
+
     parser.add_argument(
-        "--target_path",
+        "--mode",
         type=str,
         default=None,
-        required=True,
-        help="The path of the summaries to be evaluated.",
+        required=True
     )
+
     parser.add_argument(
-        "--cmlm_model_path",
+        "--model_path",
         type=str,
-        required=True,
+        default=None,
+        required=True
     )
+
     parser.add_argument(
-        "--data_name_or_path",
+        "--output_file_path",
         type=str,
-        required=True,
+        default=None,
+        required=True
     )
+
     parser.add_argument(
-        "--mlm_path",
-        type=str,
-        required=True,
+        "--predict_raio",
+        type=float,
+        default=None,
+        required=True
     )
-    parser.add_argument(
-        "--knn_model_path",
-        type=str,
-        required=True,
-    )
-    
     args = parser.parse_args()
     main(args)
