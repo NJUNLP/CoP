@@ -4,7 +4,7 @@
 
 This directory contains code necessary to replicate the training and evaluation for the AAAI 2023 paper:
 
-"**CoP: Factual Inconsistency Detection by Controlling the Preference**" by **[Shuaijie She](https://ricardokevins.github.io/), Xiang Geng and [Shujian Huang](http://nlp.nju.edu.cn/huangsj/), Jiajun Chen**.
+"**CoP: Factual Inconsistency Detection by Controlling the Preference**" by **[Shuaijie She](https://ricardokevins.github.io/), Xiang Geng and [Shujian Huang](http://nlp.nju.edu.cn/huangsj/), [Jiajun Chen](https://cs.nju.edu.cn/chenjiajun/index.htm)**.
 
 
 # Dependencies and Setup
