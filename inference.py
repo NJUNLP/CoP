@@ -188,7 +188,6 @@ def predict(args,high_bart_scorer):
 
     not_in_predict = sum(total_not_in_source_predict)
     expect_predict_num = int(len(total_not_in_source_predict) * args.predict_raio)
-    #expect_predict_num = int(sum(total_predict_label) * 0.55) + sum(total_predict_label)-not_in_predict
     total_pretent_predict_sample += expect_predict_num
     idx2score = {}
     print(len(total_prob_score))
@@ -217,7 +216,6 @@ def predict(args,high_bart_scorer):
 
 def main(args):
     model = load_model(args)
-    #print(args.data)
     predict(args,model)
 
 
