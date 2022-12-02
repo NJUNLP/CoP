@@ -17,6 +17,9 @@ en-core-web-sm          3.2.0
 nltk                    3.7
 rouge                   1.0.1
 ```
+
+
+
 # Reproduce Step
 ## Preparation
 Download Pretrain Model from Huggingface (for example [BARTCNN](https://huggingface.co/facebook/bart-large-cnn))
@@ -28,6 +31,9 @@ Evaluate on Token-level task
 Evaluate on Summary-level Task
 
 Evaluate on Inconsistency Category Task
+
+# How to Use
+
 ## How to Train with Prompt Tuning
 Looking into PromptTuning folder
 
@@ -48,10 +54,11 @@ Looking into PromptTuning folder
 ## Summary-Level Inconsistency Detection
 |  Model  |  QAGSCNN |  QAGSXSUM |  FRANKCNN |  FRANKXSUM |
 |  :----:  | :----:  | :----:  | :----:  | :----:  |
-|  BARTSc  |  0.1  |  0.1  |  0.1  |  0.1  |
-|  CoP Zero-shot  |  0.1  |  0.1  |  0.1  |  0.1  |
-|  CoP Few-shot  |  0.1  |  0.1  |  0.1  |  0.1  |
-|  CoP Full-shot  |  0.1  |  0.1  |  0.1  |  0.1  |
+|  BERTScore  |  0.1  |  0.1  |  0.1  |  0.1  |
+|  QAGSScore  |  0.1  |  0.1  |  0.1  |  0.1  |
+|  BARTScore  |  0.1  |  0.1  |  0.1  |  0.1  |
+|  CoCoScore  |  0.1  |  0.1  |  0.1  |  0.1  |
+|  Ours  |  0.1  |  0.1  |  0.1  |  0.1  |
 
 ## Inconsistency Category Detection
 
