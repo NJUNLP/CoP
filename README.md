@@ -4,7 +4,7 @@
 
 This directory contains code necessary to replicate the training and evaluation for the AAAI 2023 paper:
 
-"**CoP: Factual Inconsistency Detection by Controlling the Preference**" by **[Shuaijie She](https://ricardokevins.github.io/), Xiang Geng and [Shujian Huang](http://nlp.nju.edu.cn/huangsj/), [Jiajun Chen](https://cs.nju.edu.cn/chenjiajun/index.htm)**.
+"**CoP: Factual Inconsistency Detection by Controlling the Preference**" by **[Shuaijie She](https://ricardokevins.github.io/), [Xiang Geng](https://scholar.google.com.hk/citations?hl=zh-CN&user=n6QnFS0AAAAJ), [Shujian Huang](http://nlp.nju.edu.cn/huangsj/) and [Jiajun Chen](https://cs.nju.edu.cn/chenjiajun/index.htm)**.
 
 
 # Dependencies and Setup
@@ -32,8 +32,8 @@ Evaluate on Summary-level Task
 
 Evaluate on Inconsistency Category Task
 
-# How to Use
-
+## How to Use
+Use the inference interface in XXXX.py
 ## How to Train with Prompt Tuning
 Looking into PromptTuning folder
 
