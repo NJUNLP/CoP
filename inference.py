@@ -111,6 +111,13 @@ def few_shot_predictor(d,s,high_bart_scorer):
     predict_score = predict_with_known_num(filtered_token_list,pre_score,after_score,s)
     return predict_score
 
+def zero_shot_SummaryPredictor(d,s,high_bart_scorer):
+    pre_score = high_bart_scorer.score([d],[s],summary_level=True)
+    after_score = high_bart_scorer.score([s + " " + d],[s],summary_level=True)
+    assert len(pre_score) == 1
+    dif_scores = pre_score[0] - after_score[0]
+    return dif_scores
+    
 def predict(args,high_bart_scorer):
     documents = []
     summarys = []
@@ -134,7 +141,6 @@ def predict(args,high_bart_scorer):
     total_not_in_source_predict = []
     total_prob_score = []
 
-    #
     print(len(documents))
 
     dataset_level_information = []
@@ -146,8 +152,9 @@ def predict(args,high_bart_scorer):
             print("HIT SKIP")
             continue
         pre_sum = summary
-        summary = summary.capitalize()
-        summary = re_upper(document,summary)
+        if args.Recapital:
+            summary = summary.capitalize()
+            summary = re_upper(document,summary)
 
 
         
@@ -162,7 +169,7 @@ def predict(args,high_bart_scorer):
 
         if args.mode == "zero-shot":
             predict_score = zero_shot_predictor(d,s,high_bart_scorer)
-        
+            summary_level_score = zero_shot_SummaryPredictor(d,s,high_bart_scorer)
 
         if args.mode == 'full-shot':
             predict_score = few_shot_predictor(d,s,high_bart_scorer)
@@ -176,6 +183,7 @@ def predict(args,high_bart_scorer):
         #sample_info['not_in_score'] = predict_label1
         sample_info['document'] = d
         sample_info['summary'] = s
+        sample_info['summary_score'] = summary_level_score
         assert len(sample_info['predict_score']) == len(sample_info['summary'].split(" "))
         
         dataset_level_information.append(sample_info)
@@ -208,9 +216,19 @@ def predict(args,high_bart_scorer):
         sample['predicted_label'] = total_not_in_source_predict[iter_index:iter_index+len(sample['predict_score'])]
         iter_index += len(sample['predict_score'])
     
+    for sample in dataset_level_information:
+        #print("hit")
+        tokens = sample['summary'].split(' ')
+        predic = sample['predicted_label']
+        assert len(tokens) == len(predic)
+        tokens_labeled = [i + "[" + str(j) + ']' for i,j in zip(tokens,predic)]
+        sample['Pre_lab_summary'] = " ".join(tokens_labeled)
+        del sample['predicted_label']
+        del sample['predict_score']
     f = open(args.output_file_path,'w')
     import json
     json.dump(dataset_level_information,f,indent=2)
+
 
 
 
@@ -256,5 +274,10 @@ if __name__ == "__main__":
         default=None,
         required=True
     )
+
+    parser.add_argument("--Recapital",
+                        action="store_true",
+                        help="When Summary is lowercase, we Recapital it")
+
     args = parser.parse_args()
     main(args)

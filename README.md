@@ -33,7 +33,14 @@ Evaluate on Summary-level Task
 Evaluate on Inconsistency Category Task
 
 ## How to Use
-Use the inference interface in XXXX.py
+We provide a simple inference usage as inference.sh (currently support Zero-shot token&summary Level Tasks)
+```
+1. Prepare data (a simple example in data/toy.json)
+2. Specify Config in inference.sh
+3. Create output Folder
+4. Exec inference.sh
+```
+
 ## How to Train with Prompt Tuning
 Looking into PromptTuning folder
 
