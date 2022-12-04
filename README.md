@@ -39,6 +39,7 @@ We provide a simple inference usage as inference.sh (currently support Zero-shot
 2. Specify Config in inference.sh
 3. Create output Folder
 4. Exec inference.sh
+5. Check the result in output/result.json
 ```
 
 ## How to Train with Prompt Tuning

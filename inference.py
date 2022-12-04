@@ -21,10 +21,10 @@ from utils.overlap_predictor import synonyms_notin
 from utils.process import re_upper
 from utils.process import filter_none
 from transformers import BartTokenizer
-tokenizer = BartTokenizer.from_pretrained("/home/shesj/workspace/Data/PLM/BART")
 
 
-def is_skip(input_text):
+
+def is_skip(input_text,tokenizer):
     encoded_tgt = tokenizer(
                     [input_text],
                     max_length=1024,
@@ -117,8 +117,9 @@ def zero_shot_SummaryPredictor(d,s,high_bart_scorer):
     assert len(pre_score) == 1
     dif_scores = pre_score[0] - after_score[0]
     return dif_scores
-    
+
 def predict(args,high_bart_scorer):
+    tokenizer = BartTokenizer.from_pretrained(args.model_path)
     documents = []
     summarys = []
     result_list = []
@@ -148,7 +149,7 @@ def predict(args,high_bart_scorer):
         sample_id += 1
         document = documents[i]
         summary = summarys[i]
-        if is_skip(summary):
+        if is_skip(summary,tokenizer):
             print("HIT SKIP")
             continue
         pre_sum = summary

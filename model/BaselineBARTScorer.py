@@ -1,4 +1,5 @@
 from transformers import BartTokenizer, BartForConditionalGeneration
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 import torch.nn as nn
 import torch
 class BARTScorer:
@@ -6,8 +7,10 @@ class BARTScorer:
         # Set up model
         self.device = device
         self.max_length = max_length
-        self.tokenizer = BartTokenizer.from_pretrained(checkpoint)
-        self.model = BartForConditionalGeneration.from_pretrained(checkpoint,output_attentions=True)
+        self.tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+        #self.tokenizer = BartTokenizer.from_pretrained(checkpoint)
+        self.model = AutoModelForSeq2SeqLM.from_pretrained(checkpoint,output_attentions=True)
+        # self.model = BartForConditionalGeneration.from_pretrained(checkpoint,output_attentions=True)
         if specific_checkpoint:
             self.model.load_state_dict(torch.load(specific_checkpoint, map_location=self.device))
         self.model.eval()
