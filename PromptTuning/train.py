@@ -13,33 +13,10 @@ from check_disk import get_free_space_mb
 from torch.utils.tensorboard import SummaryWriter   
 from align import convert_bpe2_tokens_space
 from align import align_values_frombpe2tokens
-#task_name = 'Hinge40WarmUp10k500k'
-#task_name = 'Hinge20WarmUp10k500k'
-#task_name = 'BaseWarmUp10k500k'
-#task_name = 'clamp20Warup10k500k'
-#task_name = 'clamp20Warup10k500k'
-#task_name = 'clamp40Warmup15k789k'
-#task_name = 'Hinge20Warmup15k798k'
-#task_name = 'Hinge40Warmup15k798k'
-#task_name = 'BaseWarmup15k798k'
-#task_name = 'Hinge40Warmup15k798k'
-#task_name = 'BaseWarmup15k798k4Set'
-#task_name = 'BaseWarmup15k798kFewshot1K5set' #Summary Level Sample :  406 Token Level Sample   :  9938
-#task_name = 'Base4Set'
-# task_name = '?'
-#task_name = 'originLoss4Set'
-#task_name = 'originLoss5Set'
-#task_name = 'rebuildNoShuffle20+20'
-#task_name = 'rebuildNoShuffle40+40'
-#task_name = 'FewShot300_Shuffle_5+5_init2'
-#task_name = 'rebuildShuffle40+40'
-#task_name = 'EXFewShot50_Shuffle_10+10'
-task_name = '?'
-#task_name = 'test'
+
+task_name = 'New Task'
 writer = SummaryWriter("./log/" + task_name)
 log_w = open("./log/" + "{}.txt".format(task_name),'w')
-
-#hinge_loss = torch.nn.HingeEmbeddingLoss(margin=20.0,reduction='mean')
 
 def setup_seed(seed):
     torch.manual_seed(seed)
@@ -143,9 +120,6 @@ f = open("split.txt",'r')
 trainset = f.readlines()
 trainset = [int(i.strip()) for i in trainset]
 
-
-
-#trainset = trainset[:1000]
 sample_id = -1
 token_level_sample_number = 0
 
@@ -217,8 +191,6 @@ for dataset in target_data_set:
             test_label.append(target)
 
 
-
-# We Sample Buttom 40% data as dev data
 train_index = list(range(len(total_srcs)))
 random.shuffle(train_index)
 for i in range(len(total_srcs)):
@@ -241,7 +213,6 @@ print(test_label[0])
 #     token_level_sample_number += len(labs[i])
 
 print("Summary Level Sample : ",len(train_src))
-#print("Token Level Sample   : ",token_level_sample_number)
 
 from bartscore import BARTScorer
 high_bart_scorer = BARTScorer(checkpoint='../../../../Data/PLM/BARTCNN',PromptBART = True,Dev = True)
@@ -408,20 +379,11 @@ def dev(log_step):
     #return avg_loss/update_step
     return avg_loss/update_step
 
-# for i in range(5):
-#     train_index = list(range(len(train_src)))
-#     random.shuffle(train_index)
-#     test(1)
-#     dev(1)
-#     print(train_index[:10])
-
-# exit()
-
 train_src = train_src[:300]
 train_tgt = train_tgt[:300]
 train_label = train_label[:300]
 
-def train():
+def train(args):
     log_step = 0
     best_loss = 100000000000000
     EPOCH = 5000
@@ -536,12 +498,51 @@ def train():
                             #temp2 For Hinge
                             #temp3
 
-train()
 
-    # for name, param in model.named_parameters():
-    #     if 'prefix_encoder' in name:
-    #         print(param)
+if __name__ == "__main__":
+    create_toy_data()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--data_path",
+        type=str,
+        default=None,
+        required=True
+    )
 
+    parser.add_argument(
+        "--mode",
+        type=str,
+        default=None,
+        required=True
+    )
+
+    parser.add_argument(
+        "--model_path",
+        type=str,
+        default=None,
+        required=True
+    )
+
+    parser.add_argument(
+        "--output_file_path",
+        type=str,
+        default=None,
+        required=True
+    )
+
+    parser.add_argument(
+        "--predict_raio",
+        type=float,
+        default=None,
+        required=True
+    )
+
+    parser.add_argument("--Recapital",
+                        action="store_true",
+                        help="When Summary is lowercase, we Recapital it")
+
+    args = parser.parse_args()
+    train(args)
 
 
 
