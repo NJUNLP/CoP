@@ -7,6 +7,9 @@ This directory contains code necessary to replicate the training and evaluation 
 "**CoP: Factual Inconsistency Detection by Controlling the Preference**" by **[Shuaijie She](https://ricardokevins.github.io/), [Xiang Geng](https://scholar.google.com.hk/citations?hl=zh-CN&user=n6QnFS0AAAAJ), [Shujian Huang](http://nlp.nju.edu.cn/huangsj/) and [Jiajun Chen](https://cs.nju.edu.cn/chenjiajun/index.htm)**.
 
 
+
+> **I'm reorganizing the code for simplicity and convenience. I will release it gradually.**
+
 # Dependencies and Setup
 ```
 transformers            4.12.5
@@ -20,7 +23,7 @@ rouge                   1.0.1
 
 
 
-# Reproduce Step
+# Guide
 ## Preparation
 Download Pretrain Model from Huggingface (for example [BARTCNN](https://huggingface.co/facebook/bart-large-cnn))
 
@@ -43,9 +46,9 @@ We provide a simple inference usage as inference.sh (currently support Zero-shot
 ```
 
 ## How to Train with Prompt Tuning
-Looking into PromptTuning folder
+Looking into PromptTuning folder （Update ASAP）
 
-# Experimental Results
+<!-- # Experimental Results
 ## Token-Level
 
 |  Model  |  F1(%)  |
@@ -84,4 +87,4 @@ Looking into PromptTuning folder
 |  CoP Few-shot  |  0.1  |  0.1  |  0.1  |
 |  CoP Full-shot  |  0.1  |  0.1  |  0.1  |
 
-
+ -->
