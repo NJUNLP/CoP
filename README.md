@@ -48,6 +48,29 @@ We provide a simple inference usage as inference.sh (currently support Zero-shot
 ## How to Train with Prompt Tuning
 Looking into PromptTuning folder （Update ASAP）
 
+References
+If you find our work useful, please consider citing our work.
+
+```
+@misc{she2022cop,
+      title={CoP: Factual Inconsistency Detection by Controlling the Preference}, 
+      author={Shuaijie She and Xiang Geng and Shujian Huang and Jiajun Chen},
+      year={2022},
+      eprint={2212.01611},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+```
+
+```
+@article{to update with the AAAI2023 Processings,
+  title={==},
+  author={==},
+  journal={==},
+  year={==}
+}
+```
+
 <!-- # Experimental Results
 ## Token-Level
 
