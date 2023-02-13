@@ -13,6 +13,7 @@ from check_disk import get_free_space_mb
 from torch.utils.tensorboard import SummaryWriter   
 from align import convert_bpe2_tokens_space
 from align import align_values_frombpe2tokens
+import argparse
 
 device = 'cuda:0'
 
@@ -497,9 +498,9 @@ def main_traning(args):
                                 print("Saving model With Loss {}".format(best_loss))
                                 model.save_model(args.saved_model_path + "{}.pth".format(task_name))
 
+    train()
 
 if __name__ == "__main__":
-    create_toy_data()
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--data_path",
@@ -543,6 +544,39 @@ if __name__ == "__main__":
         default=500,
         required=True
     )
+
+    parser.add_argument(
+        "--lr",
+        type=float,
+        default=0.001,
+        required=True
+    )
+
+    parser.add_argument(
+        "--eps",
+        type=float,
+        default=1e-8,
+        required=True
+    )
+
+    parser.add_argument(
+        "--task_name",
+        type=str,
+        default='training',
+        required=True
+    )
+
+    parser.add_argument(
+        "--predict_ratio",
+        type=float,
+        default=0.55,
+        required=True
+    )
+
+
+
+
+
 
     args = parser.parse_args()
     main_traning(args)
