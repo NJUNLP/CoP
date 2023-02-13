@@ -46,9 +46,9 @@ We provide a simple inference usage as inference.sh (currently support Zero-shot
 ```
 
 ## How to Train with Prompt Tuning
-Looking into PromptTuning folder （Update ASAP）
+Looking into PromptTuning folder.
 
-
+Our experiments were conducted on single 3090 and take around 10G V-Memory (based on BARTCNN)
 
  
 # Citation
