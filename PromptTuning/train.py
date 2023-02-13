@@ -506,11 +506,19 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        "--mode",
+        "--training_mode", # few-shot or full-shot
+        type=str,
+        default="full-shot",
+        required=True
+    )
+
+    parser.add_argument(
+        "--log_path",
         type=str,
         default=None,
         required=True
     )
+
 
     parser.add_argument(
         "--model_path",
@@ -527,15 +535,11 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        "--predict_raio",
-        type=float,
-        default=None,
+        "--epoch",
+        type=int,
+        default=500,
         required=True
     )
-
-    parser.add_argument("--Recapital",
-                        action="store_true",
-                        help="When Summary is lowercase, we Recapital it")
 
     args = parser.parse_args()
     train(args)

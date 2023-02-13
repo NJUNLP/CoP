@@ -48,7 +48,10 @@ We provide a simple inference usage as inference.sh (currently support Zero-shot
 ## How to Train with Prompt Tuning
 Looking into PromptTuning folder （Update ASAP）
 
-References
+
+
+ 
+# Citation
 If you find our work useful, please consider citing our work.
 
 ```
