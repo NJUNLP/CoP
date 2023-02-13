@@ -479,10 +479,10 @@ def train(args):
 
                 if update_step% 100 == 0:
                     test(log_step)
-                    test_loss = dev(log_step)
-                    log_w.write("TestLoss  {} \n".format(test_loss))              
-                    if test_loss <  best_loss:
-                        best_loss = test_loss
+                    dev_loss = dev(log_step)
+                    log_w.write("DevLoss  {} \n".format(dev_loss))              
+                    if dev_loss <  best_loss:
+                        best_loss = dev_loss
                         free_space = get_free_space_mb("/home")
                         print("FREE SPACE ON DEVICE {}".format(free_space))
                         if free_space < 15:
@@ -493,10 +493,6 @@ def train(args):
                             log_w.write("Saving model With Loss {}  \n".format(best_loss))
                             print("Saving model With Loss {}".format(best_loss))
                             model.save_model("../../../../Data/PLM/PromptBART/{}.pth".format(task_name))
-                            #exit()
-                            
-                            #temp2 For Hinge
-                            #temp3
 
 
 if __name__ == "__main__":
