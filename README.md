@@ -29,7 +29,7 @@ Download Pretrain Model from Huggingface (for example [BARTCNN](https://huggingf
 
 ## How to Evaluation
 ### Evaluate on Token-level task
-TD
+
 ### Evaluate on Summary-level Task
 Using the script reproduce.sh
 
