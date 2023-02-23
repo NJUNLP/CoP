@@ -33,7 +33,7 @@ def find_entity(input_sent):
             extract_features.append(X.text)
     return extract_features
 
-# Entities can be viewed as a whole, sharing the same consistency
+# Each word in an entity can be viewed as a whole, sharing the same consistency
 # So we simply assign the maximum probability difference
 # eg. San  Fransico with score [a,b] (a>b)
 # Will be processed to [a,a]

@@ -29,8 +29,6 @@ def load_model(args):
     model = BARTScorer(device='cuda:0', checkpoint=args.model_path)
     return model
     
-
-
 def zero_shot_predictor(d,s,model):
     pre_score = model.score([d],[s],summary_level=True)
     after_score = model.score([s + " " + d],[s],summary_level=True)
