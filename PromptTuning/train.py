@@ -573,11 +573,6 @@ if __name__ == "__main__":
         required=True
     )
 
-
-
-
-
-
     args = parser.parse_args()
     main_traning(args)
 

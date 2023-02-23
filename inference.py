@@ -6,6 +6,7 @@ import torch
 import torch.nn as nn
 from rouge import Rouge
 import numpy as np
+from scipy.stats import pearsonr, spearmanr, kendalltau
 from transformers import BartTokenizer, BartForConditionalGeneration
 from model.config import Encoder_prefix_prompt_length,Encoder_inter_prompt_length,Decoder_prefix_prompt_length,target_data_set,invalid_sample_id
 from utils.wn import predict_with_sync_baseline

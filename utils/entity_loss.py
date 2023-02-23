@@ -22,13 +22,9 @@ QUANTITY:    Measurements, as of weight or distance.
 ORDINAL:     “first”, “second”, etc.
 CARDINAL:    Numerals that do not fall under another type.
 '''
-#exclude = ['DATE','TIME','PERCENT','MONEY','QUANTITY','ORDINAL','CARDINAL','LANGUAGE','GPE','LOC']
+
 exclude = ['GPE','LOC','LANGUAGE','DATE','TIME','PERCENT','MONEY','QUANTITY','ORDINAL','CARDINAL']
-#exclude = ['GPE','LOC','LANGUAGE','DATE','TIME','PERCENT','MONEY','QUANTITY','ORDINAL','CARDINAL','ORG']
-#exclude = ['DATE','TIME','GPE','LOC']
-#exclude = []
-#exclude = ["PERSON",'NORP','FAC','ORG','PRODUCT']
-print("EXCLUDE ",exclude)
+# 
 def find_entity(input_sent):
     doc = nlp(input_sent)
     extract_features = []
@@ -37,23 +33,14 @@ def find_entity(input_sent):
             extract_features.append(X.text)
     return extract_features
 
-'''
-996
-[32, 369]
-[78, 517]
-
-996
-[18, 311]
-[92, 575]
-'''
-
+# Entities can be viewed as a whole, sharing the same consistency
+# So we simply assign the maximum probability difference
+# eg. San  Fransico with score [a,b] (a>b)
+# Will be processed to [a,a]
 
 def pass_loss_Entity(score,tokens):
     count = 0
     tokens = tokens[1:-1]
-    # print(score)
-    # print(tokens)
-    # summary = "The former chief executive of the San Francisco court, Charney Charney, has been cleared by a court in California."
     sents = ' '.join(tokens)
     doc = nlp(sents)
     data_dict = {}
@@ -66,7 +53,6 @@ def pass_loss_Entity(score,tokens):
         if len(i.split()) > 1:
             count += 1
             complex_entity.append(i)
-    
     
     if len(complex_entity)>=1:
         for j in complex_entity:

@@ -30,7 +30,6 @@ Download Pretrain Model from Huggingface (for example [BARTCNN](https://huggingf
 ## How to Evaluation
 Evaluate on Token-level task
 
-
 Evaluate on Summary-level Task
 
 Evaluate on Inconsistency Category Task
