@@ -50,15 +50,7 @@ def coref_zero_shot_predictor(d,s,new_d):
 
 
 import json
-# QAGSCNN
-# 0.7301704780047028 0.7080180466947439
-# QAGSXSUM
-# 0.2663353914492119
 
-# FRANKCNN
-# 0.5608803516402584
-# FRANKXSUM
-# 0.22773678907700629
 from tabulate import tabulate
 result = []
 
