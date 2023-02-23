@@ -28,11 +28,14 @@ rouge                   1.0.1
 Download Pretrain Model from Huggingface (for example [BARTCNN](https://huggingface.co/facebook/bart-large-cnn))
 
 ## How to Evaluation
-Evaluate on Token-level task
+### Evaluate on Token-level task
+TD
+### Evaluate on Summary-level Task
+Using the script reproduce.sh
+--TestOn support four data split mentioned in paper, including ['qagscnn','qagsxsum','frankcnn','frankxum']
 
-Evaluate on Summary-level Task
 
-Evaluate on Inconsistency Category Task
+### Evaluate on Inconsistency Category Task
 
 ## How to Use
 We provide a simple inference usage as inference.sh (currently support Zero-shot token&summary Level Tasks)

@@ -1,3 +1,3 @@
 python3 reproduce.py --mode 'zero-shot' \
- --TestOn 'qagscnn'\
+ --TestOn 'qagsxsum'\
  --model_path '../../../Data/PLM/BARTCNN'

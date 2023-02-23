@@ -18,7 +18,8 @@ class BARTScorer:
 
         # Set up loss
         self.loss_fct = nn.NLLLoss(reduction='none', ignore_index=self.model.config.pad_token_id)
-        self.lsm = nn.LogSoftmax(dim=1)
+        #self.lsm = nn.LogSoftmax(dim=1)
+        self.lsm = nn.Softmax(dim=1)
 
     def load(self, path=None):
         """ Load model from paraphrase finetuning """

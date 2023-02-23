@@ -20,11 +20,6 @@ from utils.process import re_upper
 from utils.process import filter_none
 from transformers import BartTokenizer
 
-
-mode = "zero-shot"
-#mode = "full-shot"
-
-
 def load_model(args):
     optional_mode = ['zero-shot']
     if args.mode not in optional_mode:
@@ -55,9 +50,9 @@ def coref_zero_shot_predictor(d,s,new_d):
 
 
 import json
-# QAGS-CNN
-# 0.7301704780047028
-# QAGS-XSUM
+# QAGSCNN
+# 0.7301704780047028 0.7080180466947439
+# QAGSXSUM
 # 0.2663353914492119
 
 # FRANKCNN
@@ -69,7 +64,10 @@ result = []
 
 def main(args):
     model = load_model(args)
-    if args.TestOn not in ['qagscnn','qagsxum','frankcnn','frankxsum']
+    print("Testing on {}".format(args.TestOn))
+    if args.TestOn not in ['qagscnn','qagsxsum','frankcnn','frankxsum']:
+        print("ERROR")
+        exit()
     if args.TestOn == 'qagscnn' or args.TestOn == 'qagsxsum':
         if args.TestOn == 'qagscnn':
             f = open("./data/QAGSCNN.jsonl",'r',encoding = 'utf-8')
@@ -93,7 +91,7 @@ def main(args):
         for i in tqdm(range(len(source_lines))):
             d = source_lines[i]
             s = target_lines[i]
-            if mode == 'zero-shot':
+            if args.mode == 'zero-shot':
                 temp = zero_shot_predictor(d,s,model)
             predict_score.append(temp)
 
@@ -141,7 +139,6 @@ def main(args):
 
 
 if __name__ == "__main__":
-    #create_toy_data()
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--TestOn",

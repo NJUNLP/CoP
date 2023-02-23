@@ -74,13 +74,11 @@ def load_model(args):
     
     if args.mode == "zero-shot":
         from model.BaselineBARTScorer import BARTScorer
-        # from model.BRIO import BARTScorer
-        # from model.PegasusScorer import BARTScorer
-        high_bart_scorer = BARTScorer(device='cuda:0', checkpoint=args.model_path)
+        model = BARTScorer(device='cuda:0', checkpoint=args.model_path)
     else:
         from model.PromptBARTScore import BARTScorer
-        high_bart_scorer = BARTScorer(checkpoint=args.model_path,PromptBART = True)
-    return high_bart_scorer
+        model = BARTScorer(checkpoint=args.model_path,PromptBART = True)
+    return model
 
 
 count = 0
