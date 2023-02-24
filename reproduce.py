@@ -45,8 +45,6 @@ def ent_zero_shot_predictor(d,s,new_d):
 def coref_zero_shot_predictor(d,s,new_d):
     pass
 
-
-
 import json
 
 from tabulate import tabulate

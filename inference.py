@@ -229,9 +229,6 @@ def predict(args,high_bart_scorer):
     import json
     json.dump(dataset_level_information,f,indent=2)
 
-
-
-
 def main(args):
     model = load_model(args)
     predict(args,model)
