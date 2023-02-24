@@ -89,9 +89,9 @@ def main(args):
 
     if args.TestOn == 'frankcnn' or args.TestOn =='frankxsum':
         if args.TestOn == 'frankcnn':
-            f = open("./data/FRANKCNN.jsonl",'r',encoding = 'utf-8')
+            f = open("./data/FRANKCNN.json",'r',encoding = 'utf-8')
         if args.TestOn == 'frankxsum':
-            f = open("./data/FRANKXSUM.jsonl",'r',encoding = 'utf-8')
+            f = open("./data/FRANKXSUM.json",'r',encoding = 'utf-8')
         lines = f.readlines()
         lines = [i.strip() for i in lines]
         source_lines = []
